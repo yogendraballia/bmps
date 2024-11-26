@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Knowledge Matching Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #00796b;
+        }
+
+        p {
+            font-size: 1.2em;
+        }
+
+        .game-board {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .match-box {
+            display: grid;
+            grid-template-columns: repeat(3, 150px);
+            gap: 10px;
+            border: 2px solid #00796b;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .match-item {
+            width: 140px;
+            height: 60px;
+            background-color: #66bb6a;
+            color: white;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .match-item:hover {
+            background-color: #4caf50;
+        }
+
+        .match-item.selected {
+            background-color: #ff7043;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        #timer {
+            font-size: 1.5em;
+            color: #d32f2f;
+            margin-top: 10px;
+        }
+
+        #feedback {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: #d32f2f;
+        }
+
+        #leaderboard {
+            margin-top: 20px;
+            padding: 10px;
+            border: 2px solid #00796b;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Menu -->
+  
+  
+   
+        <h2><a href="index.html">Main Menu_Kids Math IQ</a></h2>
+        
+    
+    <h1>Match the Questions with Their Answers</h1>
+    <div id="usernameInput">
+        <p>Please enter your name:</p>
+        <input type="text" id="username" placeholder="Your Name" required>
+        <button id="submitNameButton">Start Game</button>
+    </div>
+    <p>Score: <span id="score">0</span></p>
+    <p id="timer">Time Left: <span id="timeLeft">60</span> seconds</p>
+    <div class="game-board" id="gameBoard">
+        <div class="match-box" id="questionBox"></div>
+        <div class="match-box" id="answerBox"></div>
+    </div>
+    <p id="feedback"></p>
+    <div id="leaderboard" style="display:none;">
+        <h2>Leaderboard</h2>
+        <ul id="leaderboardList"></ul>
+    </div>
+
+    <script>
+        const questionsAndAnswers = [
+            { question: "How many months do we have in a year?", answer: "12 months" },
+            { question: "How many colors are there in a rainbow?", answer: "7" },
+            { question: "How many wheels does a motorbike have?", answer: "2" },
+            { question: "What is the capital of India?", answer: "New Delhi" },
+            { question: "Which part of the plant is under the ground?", answer: "Roots" },
+            { question: "How many planets does the solar system consist of?", answer: "8" },
+            { question: "Who has written the national anthem of India?", answer: "Rabindranath Tagore" },
+            { question: "What is the national fruit of India?", answer: "Mango" },
+            { question: "Which is the national game of India?", answer: "Hockey" },
+            { question: "Which number comes after 9?", answer: "10" },
+            { question: "How many sides does a pentagon have?", answer: "5" },
+            { question: "Which shape is Round?", answer: "Circle" },
+            { question: "What are your ears for?", answer: "Listening" },
+            { question: "How many days are there in a year?", answer: "365 days" },
+            { question: "How many fingers are there for a single hand in a human body?", answer: "Five (5)" }
+        ];
+
+        let score = 0;
+        let selectedQuestion = null;
+        let selectedAnswer = null;
+        let timer;
+        let timeLeft = 60; // 60 seconds timer
+        let playerName = '';
+
+        // Initialize the game
+        function startGame() {
+            score = 0;
+            timeLeft = 60;
+            document.getElementById('score').innerText = score;
+            document.getElementById('timeLeft').innerText = timeLeft;
+            document.getElementById('feedback').innerText = '';
+
+            const shuffledQuestions = shuffleArray([...questionsAndAnswers]);
+            const shuffledAnswers = shuffleArray([...questionsAndAnswers]);
+
+            createMatchItems('questionBox', shuffledQuestions, 'question');
+            createMatchItems('answerBox', shuffledAnswers, 'answer');
+
+            // Start the timer
+            clearInterval(timer);
+            timer = setInterval(updateTimer, 1000);
+        }
+
+        // Shuffle the items randomly
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Create match items for questions or answers
+        function createMatchItems(containerId, items, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const matchItem = document.createElement('div');
+                matchItem.classList.add('match-item');
+                matchItem.innerText = type === 'question' ? item.question : item.answer;
+                matchItem.dataset[type] = type === 'question' ? item.question : item.answer;
+                matchItem.addEventListener('click', () => selectItem(matchItem, type));
+                container.appendChild(matchItem);
+            });
+        }
+
+        // Select an item and check for matches
+        function selectItem(matchItem, type) {
+            if (type === 'question') {
+                if (selectedQuestion) selectedQuestion.classList.remove('selected');
+                selectedQuestion = matchItem;
+            } else {
+                if (selectedAnswer) selectedAnswer.classList.remove('selected');
+                selectedAnswer = matchItem;
+            }
+            matchItem.classList.add('selected');
+
+            if (selectedQuestion && selectedAnswer) {
+                checkMatch();
+            }
+        }
+
+        // Check if the selected question and answer match
+        function checkMatch() {
+            const question = selectedQuestion.dataset.question;
+            const answer = selectedAnswer.dataset.answer;
+            const feedback = document.getElementById('feedback');
+
+            if (questionsAndAnswers.find(item => item.question === question && item.answer === answer)) {
+                score++;
+                document.getElementById('score').innerText = score;
+                feedback.innerText = 'Correct!';
+
+                // Hide matched items
+                setTimeout(() => {
+                    selectedQuestion.style.visibility = 'hidden';
+                    selectedAnswer.style.visibility = 'hidden';
+                    selectedQuestion = null;
+                    selectedAnswer = null;
+                }, 500);
+            } else {
+                feedback.innerText = 'Try again!';
+                setTimeout(() => {
+                    selectedQuestion.classList.remove('selected');
+                    selectedAnswer.classList.remove('selected');
+                    selectedQuestion = null;
+                    selectedAnswer = null;
+                }, 500);
+            }
+        }
+
+        // Update timer
+        function updateTimer() {
+            timeLeft--;
+            document.getElementById('timeLeft').innerText = timeLeft;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                endGame();
+            }
+        }
+
+        // End the game
+        function endGame() {
+            document.getElementById('feedback').innerText = `Time's up! Final Score: ${score}`;
+            const questionBox = document.getElementById('questionBox');
+            const answerBox = document.getElementById('answerBox');
+            questionBox.innerHTML = '';
+            answerBox.innerHTML = '';
+
+            // Store score in local storage
+            storeScoreInLocalStorage(playerName, score);
+            displayLeaderboard();
+        }
+
+        // Store the score and name in local storage
+        function storeScoreInLocalStorage(name, score) {
+            const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+            const timeTaken = 60 - timeLeft; // Calculate time taken
+            leaderboard.push({ name, time: timeTaken });
+            localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+        }
+
+        // Display leaderboard
+        function displayLeaderboard() {
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = '';
+            const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+            leaderboard.sort((a, b) => a.time - b.time); // Sort by time taken
+
+            leaderboard.forEach(entry => {
+                const listItem = document.createElement('li');
+                listItem.innerText = `${entry.name}: ${entry.time} seconds`;
+                leaderboardList.appendChild(listItem);
+            });
+
+            document.getElementById('leaderboard').style.display = 'block';
+        }
+
+        // Event listeners
+        document.getElementById('submitNameButton').addEventListener('click', () => {
+            playerName = document.getElementById('username').value;
+            if (playerName) {
+                document.getElementById('usernameInput').style.display = 'none';
+                startGame();
+            } else {
+                alert('Please enter your name!');
+            }
+        });
+    </script>
+</body>
+</html>

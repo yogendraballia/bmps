@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation Menu -->
+    <nav class="navigation">
+    <span class="menu-toggle" onclick="toggleMenu()">☰</span>
+    <ul id="menu">
+        <li><a href="index.html">Kids Math IQ</a></li>
+        <li><a href="alz/index.html">Algebra</a></li>
+        <li><a href="quad/index.html">Quadrilateral</a></li>
+        <li><a href="sq/index.html">Square</a></li>
+        <li><a href="cube/index.html">Cube</a></li>
+        <li><a href="letterMissing/index.html">Letter Missing</a></li>
+        <li><a href="letterMatch/index.html">Letter Matching</a></li>
+        <li><a href="geo/index.html">Geometry</a></li>
+        <li><a href="festiveGame/index.html">Festival</a></li>
+        <li><a href="calc/index.html">Calculator</a></li>
+		<li><a href="geoCalc/index.html">Geometry Calculator</a></li>
+		<li><a href="alzCalc/index.html">Algebraic Calculator</a></li>
+        <li><a href="gk.html">General Knowledge</a></li>
+        <li><a href="naturalResources/index.html">Natural Resources</a></li>
+        <li><a href="state-capital.html">State Capital Matching</a></li>
+    </ul>
+</nav>
+
+
+    <!-- Main Content -->
+    <h1>Kids Math IQ Quiz with BM PUBLIC SCHOOL</h1>
+    <div id="quiz">
+        <p id="question"></p>
+        <input type="number" id="answer" placeholder="Your answer" />
+        <button id="submitAnswer">Submit</button>
+        <p id="feedback"></p>
+    </div>
+    <p>Score: <span id="score">0</span></p>
+    <button id="startButton">Start Game</button>
+    <p id="timer">Time left: <span id="timeLeft">70</span> seconds</p>
+    <script src="script.js"></script>
+</body>
+</html>
