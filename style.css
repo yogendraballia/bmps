@@ -2,86 +2,131 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+    background-color: #f9f9f9;
 }
 
+h1 {
+    font-size: 1.5em;
+    text-align: center;
+    margin: 10px 0;
+    color: #333;
+}
+
+#quiz {
+    max-width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    display: none; /* Hide initially, shown when game starts */
+}
+
+#quiz input[type="number"],
+button {
+    width: 90%;
+    max-width: 300px;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Navigation Menu */
 .navigation {
     background-color: #4CAF50;
-    overflow: hidden;
-    padding: 10px 0;
+    position: relative;
+}
+
+#centerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
 }
 
 .navigation ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: none; /* Hidden by default for mobile */
+    flex-direction: column;
+    background-color: #4CAF50;
+}
+
+.navigation ul.show {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
 }
 
 .navigation li {
-    margin: 0 15px;
+    margin: 0;
+    text-align: center;
 }
 
 .navigation a {
     text-decoration: none;
     color: white;
     font-size: 1em;
-    padding: 10px 15px;
-    transition: background-color 0.3s ease;
-    border-radius: 5px;
+    padding: 10px;
+    display: block;
 }
 
 .navigation a:hover {
     background-color: #45a049;
-    color: #fff;
+    color: white;
 }
 
-/* Mobile Navigation: Collapsible Menu */
-.navigation {
-    position: relative;
-}
-
-.navigation .menu-toggle {
-    display: none;
+.menu-toggle {
+    display: block;
     position: absolute;
-    top: 10px;
+    top: 15px;
     right: 20px;
     font-size: 24px;
     color: white;
     cursor: pointer;
 }
 
-.navigation ul {
-    flex-direction: column;
-    display: none; /* Hide menu by default */
-    width: 100%;
-    background-color: #4CAF50;
-    padding: 0;
-}
-
-.navigation ul.show {
-    display: flex; /* Show menu on toggle */
-}
-
-.navigation li {
-    text-align: center;
-    margin: 10px 0;
-}
-
 /* Responsive Styles */
 @media (min-width: 768px) {
-    .navigation .menu-toggle {
+    .menu-toggle {
         display: none;
     }
 
     .navigation ul {
-        flex-direction: row;
         display: flex;
+        flex-direction: row;
         justify-content: center;
     }
 
     .navigation li {
         margin: 0 15px;
     }
+}
+
+#timer, #score {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 1.1em;
+    color: #333;
 }
